@@ -45,7 +45,7 @@ endfunction
 
 function! GetFoldText()
   if (match(getline(v:foldstart), "[\s\t]*[-\*][\s\t]*.*") != -1)
-    let nl = v:foldend - v:foldstart + 1
+    let nl = v:foldend - v:foldstart
     let linetext = substitute(getline(v:foldstart),"-","+",1)
     let txt =  linetext . "\t (" . nl . ' lines hidden)'
   else
@@ -54,10 +54,10 @@ function! GetFoldText()
 
   return txt
 endfunction
-set foldtext=GetFoldText()
-set foldmethod=expr
-set foldexpr=GetListFold(v:lnum)
-
+setlocal foldtext=GetFoldText()
+setlocal foldmethod=expr
+setlocal foldexpr=GetListFold(v:lnum)
+setlocal fillchars=fold:\ 
 
 " GitHub Flavored Markdown states
 let g:touchdown__checkbox_states = [' ', 'x', ' ']
@@ -65,7 +65,7 @@ let g:touchdown__checkbox_states = [' ', 'x', ' ']
 "
 " Toggle checkboxes
 "
-fun! Touchdown#ToggleCheckbox()
+function! ToggleMarkdownCheckbox()
   let original_line = getline('.')
   let current_line = copy(original_line)
   
@@ -85,8 +85,8 @@ fun! Touchdown#ToggleCheckbox()
   if(original_line != current_line)
     call setline('.', current_line)
   endif
-endfun
-command! ToggleCheckbox call Touchdown#ToggleCheckbox()
+endfunction
+command! ToggleCheckbox call ToggleMarkdownCheckbox()
 nmap <silent> <leader>tt :ToggleCheckbox<cr>
 
 
