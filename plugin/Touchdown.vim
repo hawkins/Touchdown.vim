@@ -6,6 +6,9 @@ if exists('g:touchdown__loaded')
 endif
 
 
+" Folding for markdown
+autocmd BufNewFile,BufRead *.md set foldmethod=indent
+
 " GitHub Flavored Markdown states
 let g:touchdown__checkbox_states = [' ', 'x', ' ']
 
