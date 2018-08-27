@@ -43,6 +43,14 @@ function! GetListFold(lnum)
   endif
 endfunction
 
+function! GetFoldText()
+  " TODO: Conditionally apply this logic, else default
+  let nl = v:foldend - v:foldstart + 1
+  let linetext = substitute(getline(v:foldstart),"-","+",1)
+  let txt =  linetext . "\t (" . nl . ' lines hidden)'
+  return txt
+endfunction
+set foldtext=GetFoldText()
 set foldmethod=expr
 set foldexpr=GetListFold(v:lnum)
 
