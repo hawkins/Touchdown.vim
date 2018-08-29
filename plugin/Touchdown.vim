@@ -89,6 +89,21 @@ endfunction
 command! ToggleCheckbox call ToggleMarkdownCheckbox()
 nmap <silent> <leader>tt :ToggleCheckbox<cr>
 
+"
+" Bold lines
+"
+function! ToggleBoldLine()
+  let current_line = getline('.')
+  " See if this is a list item, if it starts with \s*[-\*]
+  let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\=\s*\)\(\S\)\@=', '\2\3**', '')
+  
+  " Now do the same for the end of the line
+  " substitute(current_line, )
+  call setline('.', current_line)
+endfunction!
+command! ToggleBold call ToggleBoldLine()
+nmap  <leader>tb :ToggleBold<cr>
+
 
 let g:touchdown__loaded = 1
 
