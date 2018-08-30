@@ -89,25 +89,33 @@ endfunction
 command! ToggleCheckbox call ToggleMarkdownCheckbox()
 nmap <silent> <leader>tt :ToggleCheckbox<cr>
 
+" Returns 1 if line is a list item ( - test, * test), 0 otherwise
+function! IsLineAListItem(line)
+  " TODO: The engine is aggresively lazy, and that's making part
+  " of this process a headache, so we'll split regular expressions
+  " on this function call, and ultimately thus this if  statement
+  " below, until I'm a wee bit smarter about this problem.
+  if(match(a:line, '^\s*[-\*]\s') != -1)
+    return 1
+  else
+    return 0
+  endif
+endfunction
+
 "
 " Bold lines
 "
 function! ToggleBoldLine()
   let current_line = getline('.')
-  " See if this is a list item, if it starts with \s*[-\*]
 
   " Handle 'empty' lines
-  if(exists('g:touchdown__ignore_empty_bold'))
-    if(match(current_line, '^\s*$') != -1)
-      return
-    endif
-  else
-    if(match(current_line, '^\s*$') != -1)
+  if(match(current_line, '^\s*$') != -1)
+    if(!exists('g:touchdown__ignore_empty_bold'))
       call setline('.', '**')
-      return
     endif
-
-    if(match(current_line, '^\s*\*\*\s*$') != -1)
+    return
+  else
+    if(match(current_line, '^\s*\*\*\s*$') != -1 && !exists('g:touchdown__ignore_empty_bold'))
       let current_line = substitute(current_line, '\(^\s*\)\*\*\(\s*\)$', '\1\2', '')
       call setline('.', current_line)
       return
@@ -117,12 +125,7 @@ function! ToggleBoldLine()
   " If the line is already bolded...
   if(match(current_line, '^\s*[-\*]\=\s*\*\*') != -1)
     " Then remove the bold
-    " TODO: The engine is aggresively lazy, and that's making part
-    " of this process a headache, so we'll split on an if statement
-    " until I'm a wee bit smarter about this problem.
-    " If we are looking at a list item...
-    " NOTE: PCRE goal: /^\s*[-\*](?!\*)/
-    if(match(current_line, '^\s*[-\*]\s') != -1)
+    if(IsLineAListItem(current_line))
       let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s*\)\*\*', '\2', 1)
     else
       let current_line = substitute(current_line, '\(^\s*\)\*\*', '\1', 1)
@@ -131,11 +134,7 @@ function! ToggleBoldLine()
     let current_line = substitute(current_line, '\*\*$', '', 1)
   else
     " Otherwise add the bold
-    " TODO: The engine is aggresively lazy, and that's making part
-    " of this process a headache, so we'll split on an if statement
-    " until I'm a wee bit smarter about this problem.
-    " If we are looking at a list item...
-    if(match(current_line, '^\s*[-\*]') != -1)
+    if(IsLineAListItem(current_line))
       let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s*\)', '\2**', 1)
     else
       let current_line = substitute(current_line, '\(^\s*\)\@<=\(\S\)', '**\2', 1)
