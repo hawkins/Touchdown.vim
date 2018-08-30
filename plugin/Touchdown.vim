@@ -44,7 +44,7 @@ function! GetListFold(lnum)
 endfunction
 
 function! GetFoldText()
-  if (match(getline(v:foldstart), "[\s\t]*[-\*][\s\t]*.*") != -1)
+  if (IsLineAListItem(getline(v:foldstart)))
     let nl = v:foldend - v:foldstart
     let linetext = substitute(getline(v:foldstart),"-","+",1)
     let txt =  linetext . "\t (" . nl . ' lines hidden)'
@@ -69,8 +69,7 @@ function! ToggleMarkdownCheckbox()
   let original_line = getline('.')
   let current_line = copy(original_line)
   
-  " If we have a checkbox here
-  if(match(current_line, '\[.\]') != -1)
+  if(IsLineACheckbox(current_line))
     for state in g:touchdown__checkbox_states
       if(match(current_line, '\[' . state . '\]') != -1)
         let state_index = index(g:touchdown__checkbox_states, state)
