@@ -96,14 +96,31 @@ function! ToggleBoldLine()
   let current_line = getline('.')
   " See if this is a list item, if it starts with \s*[-\*]
 
-  " TODO: What should we do when the line is empty?
+  " Handle 'empty' lines
+  if(exists('g:touchdown__ignore_empty_bold'))
+    if(match(current_line, '^\s*$') != -1)
+      return
+    endif
+  else
+    if(match(current_line, '^\s*$') != -1)
+      call setline('.', '**')
+      return
+    endif
 
-  " If the line is bolded already
+    if(match(current_line, '^\s*\*\*\s*$') != -1)
+      let current_line = substitute(current_line, '\(^\s*\)\*\*\(\s*\)$', '\1\2', '')
+      call setline('.', current_line)
+      return
+    endif
+  endif
+
+  " If the line is already bolded...
   if(match(current_line, '^\s*[-\*]\=\s*\*\*') != -1)
     " Then remove the bold
     " TODO: The engine is aggresively lazy, and that's making part
     " of this process a headache, so we'll split on an if statement
     " until I'm a wee bit smarter about this problem.
+    " If we are looking at a list item...
     " NOTE: PCRE goal: /^\s*[-\*](?!\*)/
     if(match(current_line, '^\s*[-\*]\s') != -1)
       let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s*\)\*\*', '\2', 1)
@@ -117,6 +134,7 @@ function! ToggleBoldLine()
     " TODO: The engine is aggresively lazy, and that's making part
     " of this process a headache, so we'll split on an if statement
     " until I'm a wee bit smarter about this problem.
+    " If we are looking at a list item...
     if(match(current_line, '^\s*[-\*]') != -1)
       let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s*\)', '\2**', 1)
     else
@@ -129,7 +147,7 @@ function! ToggleBoldLine()
   call setline('.', current_line)
 endfunction!
 command! ToggleBold call ToggleBoldLine()
-nmap  <leader>tb :ToggleBold<cr>
+nmap <silent> <leader>tb :ToggleBold<cr>
 
 
 let g:touchdown__loaded = 1
