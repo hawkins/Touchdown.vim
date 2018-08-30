@@ -22,3 +22,4 @@ Plugin 'hawkins/Touchdown.vim'
 You can set any of these options in your `~/.vimrc` to configure how Touchdown operates:
 
 - `g:touchdown__ignore_empty_bold`: Set this to anything to disable adding `**` to an empty line when bold is toggled on that line
+- `g:touchdown__no_indent`: Set this to anything to disable <kbd>Tab</kbd> to indent and <kbd>Shift</kbd>+<kbd>Tab</kbd> to outdent
