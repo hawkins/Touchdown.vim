@@ -102,6 +102,16 @@ function! IsLineAListItem(line)
   endif
 endfunction
 
+" Returns 1 if line is a checkbox line (- [ ], * [ ]), 0 otherwise
+function! IsLineACheckbox(line)
+  " Note: every checkbox is a line item, too
+  if(match(a:line, '^\s*[-\*]\s\[.\]') != -1)
+    return 1
+  else
+    return 0
+  endif
+endfunction
+
 "
 " Bold lines
 "
@@ -123,21 +133,30 @@ function! ToggleBoldLine()
   endif
 
   " If the line is already bolded...
-  if(match(current_line, '^\s*[-\*]\=\s*\*\*') != -1)
+  " TODO: Checkbox logic missing from this regex
+  if(match(current_line, '^\s*[-\*]\=\s*\(\[.\]\s*\)\=\*\*') != -1)
     " Then remove the bold
-    if(IsLineAListItem(current_line))
-      let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s*\)\*\*', '\2', 1)
+    if(IsLineACheckbox(current_line))
+      let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s\[.\]\s*\)\*\*', '\2', 1)
     else
-      let current_line = substitute(current_line, '\(^\s*\)\*\*', '\1', 1)
+      if(IsLineAListItem(current_line))
+        let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s*\)\*\*', '\2', 1)
+      else
+        let current_line = substitute(current_line, '\(^\s*\)\*\*', '\1', 1)
+      endif
     endif
 
     let current_line = substitute(current_line, '\*\*$', '', 1)
   else
     " Otherwise add the bold
-    if(IsLineAListItem(current_line))
-      let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s*\)', '\2**', 1)
+    if(IsLineACheckbox(current_line))
+      let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s\[.\]\s*\)', '\2**', 1)
     else
-      let current_line = substitute(current_line, '\(^\s*\)\@<=\(\S\)', '**\2', 1)
+      if(IsLineAListItem(current_line))
+        let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s*\)', '\2**', 1)
+      else
+        let current_line = substitute(current_line, '\(^\s*\)\@<=\(\S\)', '**\2', 1)
+      endif
     endif
 
     let current_line = substitute(current_line, '\S\@<=$', '**', 1)
