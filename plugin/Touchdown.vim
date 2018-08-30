@@ -60,8 +60,10 @@ setlocal foldexpr=GetListFold(v:lnum)
 setlocal fillchars=fold:\ 
 
 " Indent lines
-nmap <silent> <tab> >>
-nmap <silent> <S-tab> <<
+if(!exists('g:touchdown__no_indent'))
+  nmap <silent> <tab> >>
+  nmap <silent> <S-tab> <<
+endif
 
 " GitHub Flavored Markdown states
 let g:touchdown__checkbox_states = [' ', 'x', ' ']
