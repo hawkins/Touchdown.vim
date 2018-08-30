@@ -59,6 +59,10 @@ setlocal foldmethod=expr
 setlocal foldexpr=GetListFold(v:lnum)
 setlocal fillchars=fold:\ 
 
+" Indent lines
+nmap <silent> <tab> >>
+nmap <silent> <S-tab> <<
+
 " GitHub Flavored Markdown states
 let g:touchdown__checkbox_states = [' ', 'x', ' ']
 
