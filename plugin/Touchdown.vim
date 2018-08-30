@@ -95,10 +95,37 @@ nmap <silent> <leader>tt :ToggleCheckbox<cr>
 function! ToggleBoldLine()
   let current_line = getline('.')
   " See if this is a list item, if it starts with \s*[-\*]
-  let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\=\s*\)\(\S\)\@=', '\2\3**', '')
-  
-  " Now do the same for the end of the line
-  " substitute(current_line, )
+
+  " TODO: What should we do when the line is empty?
+
+  " If the line is bolded already
+  if(match(current_line, '^\s*[-\*]\=\s*\*\*') != -1)
+    " Then remove the bold
+    " TODO: The engine is aggresively lazy, and that's making part
+    " of this process a headache, so we'll split on an if statement
+    " until I'm a wee bit smarter about this problem.
+    " NOTE: PCRE goal: /^\s*[-\*](?!\*)/
+    if(match(current_line, '^\s*[-\*]\s') != -1)
+      let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s*\)\*\*', '\2', 1)
+    else
+      let current_line = substitute(current_line, '\(^\s*\)\*\*', '\1', 1)
+    endif
+
+    let current_line = substitute(current_line, '\*\*$', '', 1)
+  else
+    " Otherwise add the bold
+    " TODO: The engine is aggresively lazy, and that's making part
+    " of this process a headache, so we'll split on an if statement
+    " until I'm a wee bit smarter about this problem.
+    if(match(current_line, '^\s*[-\*]') != -1)
+      let current_line = substitute(current_line, '\(^\s*\)\@<=\([-\*]\s*\)', '\2**', 1)
+    else
+      let current_line = substitute(current_line, '\(^\s*\)\@<=\(\S\)', '**\2', 1)
+    endif
+
+    let current_line = substitute(current_line, '\S\@<=$', '**', 1)
+  endif
+
   call setline('.', current_line)
 endfunction!
 command! ToggleBold call ToggleBoldLine()
