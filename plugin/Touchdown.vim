@@ -65,8 +65,10 @@ if(!exists('g:touchdown__no_indent'))
   nmap <silent> <S-tab> <<
 endif
 
-" GitHub Flavored Markdown states
-let g:touchdown__checkbox_states = [' ', 'x', ' ']
+if(!exists('g:touchdown__checkbox_states'))
+  " GitHub Flavored Markdown states
+  let g:touchdown__checkbox_states = [' ', 'x', ' ']
+endif
 
 "
 " Toggle checkboxes
