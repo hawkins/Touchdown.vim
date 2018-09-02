@@ -156,19 +156,21 @@ function! NextIndent(exclusive, fwd, lowerlevel, skipblanks)
   endwhile
 endfunction
 
-" Moving back and forth between lines of same or lower indentation.
-nmap <C-Up> :call NextIndent(0, 0, 0, 1)<CR>
-nmap <C-Down> :call NextIndent(0, 1, 0, 1)<CR>
-nmap <C-Left> :call NextIndent(0, 0, 1, 1)<CR>
-nmap <C-Right> :call NextIndent(0, 1, 1, 1)<CR>
-vmap <C-Up> <Esc>:call NextIndent(0, 0, 0, 1)<CR>m'gv''
-vmap <C-Down> <Esc>:call NextIndent(0, 1, 0, 1)<CR>m'gv''
-vmap <C-Left> <Esc>:call NextIndent(0, 0, 1, 1)<CR>m'gv''
-vmap <C-Right> <Esc>:call NextIndent(0, 1, 1, 1)<CR>m'gv''
-omap <C-Up> :call NextIndent(0, 0, 0, 1)<CR>
-omap <C-Down> :call NextIndent(0, 1, 0, 1)<CR>
-omap <C-Left> :call NextIndent(1, 0, 1, 1)<CR>
-omap <C-Right> :call NextIndent(1, 1, 1, 1)<CR>
+if (!exists('g:touchdown__no_indent_traversal'))
+  " Moving back and forth between lines of same or lower indentation.
+  nmap <C-Up> :call NextIndent(0, 0, 0, 1)<CR>
+  nmap <C-Down> :call NextIndent(0, 1, 0, 1)<CR>
+  nmap <C-Left> :call NextIndent(0, 0, 1, 1)<CR>
+  nmap <C-Right> :call NextIndent(0, 1, 1, 1)<CR>
+  vmap <C-Up> <Esc>:call NextIndent(0, 0, 0, 1)<CR>m'gv''
+  vmap <C-Down> <Esc>:call NextIndent(0, 1, 0, 1)<CR>m'gv''
+  vmap <C-Left> <Esc>:call NextIndent(0, 0, 1, 1)<CR>m'gv''
+  vmap <C-Right> <Esc>:call NextIndent(0, 1, 1, 1)<CR>m'gv''
+  omap <C-Up> :call NextIndent(0, 0, 0, 1)<CR>
+  omap <C-Down> :call NextIndent(0, 1, 0, 1)<CR>
+  omap <C-Left> :call NextIndent(1, 0, 1, 1)<CR>
+  omap <C-Right> :call NextIndent(1, 1, 1, 1)<CR>
+endif
 
 
 let g:touchdown__loaded = 1
