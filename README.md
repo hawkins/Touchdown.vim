@@ -9,6 +9,8 @@ A Vim plugin for Markdown editing focused on To-Do lists, supporting GitHub Flav
   - Works with regular text lines, list items, and even check boxes
 - Toggle checkboxes with <kbd>`<leader>`tt</kbd> in list items
 - Indent/outdent with <kbd>Tab</kbd>/<kbd>Shift</kbd>+<kbd>Tab</kbd>
+- Easily navigate to list items at the same indentation with <kbd>CTRL</kbd>+<kbd>Up</kbd>, <kbd>CTRL</kbd>+<kbd>Down</kbd>, etc
+  - Thanks to the great folks behind [the Vim wiki](http://vim.wikia.com/wiki/Move_to_next/previous_line_with_same_indentation)
 
 ## Installation
 
